@@ -13,7 +13,7 @@ setup(
     description="Causal Impact of an intervention integrated with control group selection",
     long_description=readme,
     long_description_content_type="text/markdown",
-    url="hhttps://github.com/unbiasedmodeler/pycausalmatch",
+    url="https://github.com/unbiasedmodeler/pycausalmatch",
     packages=find_packages(),
     install_requires=requirements,
     classifiers=[
