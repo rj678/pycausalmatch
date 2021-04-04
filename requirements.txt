@@ -1,0 +1,4 @@
+numpy==1.18.1
+pandas==1.2.3
+dtw-python==1.1.6
+pycausalimpact==0.0.14
