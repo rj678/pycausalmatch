@@ -18,6 +18,9 @@ The R library has a detailed README.
 The causal impact from this Python version matches the impact for the test market ('CPH') in the example
 in the R library, as shown in the plots in the `starter_example` notebook.
 
+This is still an **alpha release** - I will hopefully get around to adding more features, and fixing
+all the bugs soon!
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install pycausalmatch.
@@ -45,6 +48,8 @@ rmm.inference(**kwargs) # returns
 - [ ] add statistical inference
 
 - [ ] use software project structure template
+
+- [ ] Integrate into an MLOps workflow
 
 - [ ] Add parallel execution (I plan to use Bodo)
 
