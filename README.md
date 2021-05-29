@@ -8,8 +8,8 @@ process of selecting suitable control groups
 #### Description
 
 The functionality that has been implemented so far is essentially a Python translation of the
-features available in the R library: https://github.com/klarsen1/MarketMatching , which combines 2 packages:
-https://github.com/dafiti/causalimpact and https://github.com/DynamicTimeWarping/dtw-python
+features available in the R library: https://github.com/klarsen1/MarketMatching (v.1.1.7 - as of Dec 2020),
+which combines 2 packages: https://github.com/dafiti/causalimpact and https://github.com/DynamicTimeWarping/dtw-python
 
 The DTW package is used for selection of most suitable control groups.
 
@@ -18,7 +18,7 @@ The R library has a detailed README.
 The causal impact from this Python version matches the impact for the test market ('CPH') in the example
 in the R library, as shown in the plots in the `starter_example` notebook.
 
-This is still an **alpha release** - I will hopefully get around to adding more features, and fixing
+This is still an **alpha release** - I'm in the process of adding more features, and fixing
 all the bugs soon!
 
 ## Installation
@@ -39,9 +39,19 @@ rmm.inference(**kwargs) # returns
 
 ```
 
+
+### Example Use case
+
+I've added an example on the causal impact of Prop 99 in California in the notebook `prop_99_example`
+under the examples folder. I will keep updating this example as I develop the library further.
+
+
+
 ## TODOs
 
 - [ ] Improve README!
+
+- [ ] Add more examples (Prop 99 - CA)
 
 - [ ] add tests
 
@@ -53,11 +63,14 @@ rmm.inference(**kwargs) # returns
 
 - [ ] Add parallel execution (I plan to use Bodo)
 
-- [ ] Add Streamlit app
+- [ ] Add Streamlit and Dash app
 
 - [ ] switch to https://github.com/WillianFuks/tfcausalimpact
 
 - [ ] add remaining functionality of the R package
+
+
+
 
 
 ## Contributing
