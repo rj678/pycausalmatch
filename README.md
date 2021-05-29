@@ -40,10 +40,11 @@ rmm.inference(**kwargs) # returns
 ```
 
 
-### Example Use case
+## Example Use case
 
 I've added an example on the causal impact of Prop 99 in California in the notebook `prop_99_example`
 under the examples folder. I will keep updating this example as I develop the library further.
+
 
 
 
