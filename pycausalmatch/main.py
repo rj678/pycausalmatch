@@ -357,13 +357,26 @@ class R_MarketMatching():
                     # initialized all_distances as dataframe instead of list
                     all_distances = dist_op.copy(deep=True)
                 else:
-                    all_distances.append(dist_op, ignore_index=True)
+                    all_distances = all_distances.append(dist_op, ignore_index=True)
 
             shortest_distances_df = all_distances.copy(deep=True)
 
         else:
             #TODO add parallel execution
-            print("Parallel execution has not been added yet")
+            print("Parallel execution has not been added yet - executing sequentially")
+            
+            for i in range(len(markets_to_be_matched)):
+                dist_op = R_MarketMatching.calculate_distances(markets_to_be_matched, ip_df, id_variable,
+                                                i, warping_limit, matches, dtw_emphasis
+                                                )
+
+                if i == 0:
+                    # initialized all_distances as dataframe instead of list
+                    all_distances = dist_op.copy(deep=True)
+                else:
+                    all_distances = all_distances.append(dist_op, ignore_index=True)
+
+            shortest_distances_df = all_distances.copy(deep=True)
 
         suggested_split = None
         #TODO check the next part if segmentation == True - this part has changed in the most recent version

@@ -7,7 +7,7 @@ requirements = ["numpy>=1.18.1", "pandas>=1.0.3", "dtw-python==1.1.6", "pycausal
 
 setup(
     name="pycausalmatch",
-    version="0.0.1",
+    version="0.0.2",
     author="Rishi Jumani",
     author_email="unbiased.modeler@gmail.com",
     description="Causal Impact of an intervention integrated with control group selection",

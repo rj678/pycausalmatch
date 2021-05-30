@@ -39,6 +39,8 @@ rmm.inference(**kwargs) # returns
 
 ```
 
+This package has only been tested for ** a single test market** (I will test it for multiple test markets soon)
+
 
 ## Example Use case
 
