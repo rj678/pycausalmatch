@@ -295,12 +295,12 @@ class R_MarketMatching():
 
         if matches is None:
             if (markets_to_be_matched is None and suggest_market_splits == True):
-                matches = data['id_var'].nunique
+                matches = ip_df['id_var'].nunique
             else:
                 matches = 5
         else:
             if (markets_to_be_matched is None and suggest_market_splits == True):
-                matches = data['id_var'].nunique
+                matches = ip_df['id_var'].nunique
                 print("The matches parameter has been overwritten to conduct a full search for optimized pairs")
 
 
