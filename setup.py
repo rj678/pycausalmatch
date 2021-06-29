@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
-requirements = ["numpy>=1.18.1", "pandas>=1.0.3", "dtw-python==1.1.6", "pycausalimpact==0.0.14"]
+requirements = ["numpy>=1.18.1", "pandas>=1.0.3", "dtw-python==1.1.6", "tfcausalimpact==0.0.5"]
 
 setup(
     name="pycausalmatch",
-    version="0.0.3",
+    version="0.0.4",
     author="Rishi Jumani",
     author_email="unbiased.modeler@gmail.com",
     description="Causal Impact of an intervention integrated with control group selection",

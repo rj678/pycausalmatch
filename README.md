@@ -12,7 +12,10 @@ intent of eventually deploying pipelines)
 
 The functionality that has been implemented so far is essentially a Python translation of the
 features available in the R library: https://github.com/klarsen1/MarketMatching (v.1.1.7 - as of Dec 2020),
-which combines 2 packages: https://github.com/dafiti/causalimpact and https://github.com/DynamicTimeWarping/dtw-python
+which combines 2 packages: https://github.com/WillianFuks/tfcausalimpact and https://github.com/DynamicTimeWarping/dtw-python
+
+(I switched to tfcausalimpact in v0.0.4, from pycausalimpact, which was available at https://github.com/dafiti/causalimpact,
+  but has now been removed)
 
 The DTW package is used for selection of most suitable control groups.
 
@@ -42,7 +45,7 @@ rmm.inference(**kwargs) # returns
 
 ```
 
-This package has only been tested for **a single test market** (I will test it for multiple test markets soon)
+This package has only been tested for **a single test market** (I will test it for multiple test markets soon).
 
 
 ## Example Use case
@@ -71,7 +74,7 @@ under the notebooks/examples folder. I will keep updating this example as I deve
 
 - [ ] Add Streamlit and Dash app
 
-- [ ] switch to https://github.com/WillianFuks/tfcausalimpact
+- [x] switch to https://github.com/WillianFuks/tfcausalimpact
 
 - [ ] add remaining functionality of the R package
 
@@ -88,7 +91,7 @@ Please make sure to update tests as appropriate.
 [MIT](https://choosealicense.com/licenses/mit/)
 
 
-#### Project Organization
+#### Project Organization (partially implemented)
 ------------
 
     ├── LICENSE

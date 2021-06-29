@@ -12,7 +12,7 @@ from causalimpact import CausalImpact
 
 
 class R_MarketMatching():
-    
+
     """
     TODO:
 
@@ -364,7 +364,7 @@ class R_MarketMatching():
         else:
             #TODO add parallel execution
             print("Parallel execution has not been added yet - executing sequentially")
-            
+
             for i in range(len(markets_to_be_matched)):
                 dist_op = R_MarketMatching.calculate_distances(markets_to_be_matched, ip_df, id_variable,
                                                 i, warping_limit, matches, dtw_emphasis
@@ -456,7 +456,8 @@ class R_MarketMatching():
 
 
     def inference(matched_markets=None, bsts_modelargs=None, test_market=None, end_post_period=None,
-                alpha=0.05, prior_level_sd=0.01, control_matches=5, analyze_betas=False, nseasons=None
+                alpha=0.05, prior_level_sd=0.01, control_matches=5, analyze_betas=False, nseasons=None,
+                ci_fit_method = 'vi'
                 ):
 
 
@@ -558,7 +559,7 @@ class R_MarketMatching():
 
 
         #TODO add alpha=alpha, model.args=bsts_modelargs
-        impact = CausalImpact(ts, pre_period, post_period)
+        impact = CausalImpact(ts, pre_period, post_period, model_args={'fit_method': ci_fit_method})
 
         #TODO implement analyze_betas = True
         if analyze_betas:
@@ -586,5 +587,3 @@ class R_MarketMatching():
         print('Matching (pre) Period MAPE: ')
 
         return results
-
-        
