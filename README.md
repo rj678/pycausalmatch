@@ -1,10 +1,11 @@
+### this repo is not being developed or maintained any more
 
 # pycausalmatch
 
 pycausalmatch is a Python library for causal inference integrated with the
 process of selecting suitable control groups.
 
-(I hope develop this as a causal inference project for Big Data with the
+(I hope to develop this as a causal inference project for Big Data with the
 intent of eventually deploying pipelines)
 
 
