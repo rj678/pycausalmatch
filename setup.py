@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as readme_file:
     readme = readme_file.read()
 
-requirements = ["numpy>=1.18.1", "pandas>=1.0.3", "dtw-python==1.1.6", "tfcausalimpact==0.0.5"]
+requirements = ["numpy>=1.18.1", "pandas>=1.0.3", "dtw-pytho>=1.1.6", "tfcausalimpact>=0.0.5"]
 
 setup(
     name="pycausalmatch",

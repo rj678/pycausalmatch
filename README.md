@@ -1,4 +1,3 @@
-### this repo is not being developed or maintained any more
 
 # pycausalmatch
 
@@ -126,7 +125,7 @@ results_only_cph['all_output_plots'](figsize=(15, 14))
 
 - [ ] Integrate into an MLOps workflow
 
-- [ ] Add parallel execution (I plan to use Bodo)
+- [ ] Add parallel execution
 
 - [ ] Add Streamlit and Dash app
 
