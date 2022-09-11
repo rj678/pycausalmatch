@@ -76,7 +76,7 @@ class R_MarketMatching():
 
         else:
 
-            #TODO check this block from line 169 in R
+            #TODO: check this block from line 169 in R
             d = d.drop_duplicates()
             ref = d[d['id_var'].isin(ref_market)]
             ref = ref['date_var', 'id_var', 'match_var']
@@ -95,31 +95,30 @@ class R_MarketMatching():
 
     def mape_no_zeros(test, ref):
         """
-        not used so far - will be need after analyze_betas is added
         """
-        df = pd.concat(test, ref, axis=1)
+        df = pd.DataFrame(test, ref).reset_index()
+        df.rename(columns={df.columns[0]: "test", df.columns[1]: "ref" }, inplace=True)
         df = df[(df['test'] > 0) & (df['ref'] > 0)]
 
         return np.mean(np.abs(df['test'] - df['ref'])/df['test'])
 
-
+    @staticmethod
     def lagp(x, p):
         """
         this function is only called by the function dw()
         """
 
-        op = [0]*p + x[:(len(x) - p)]
+        op = [0]*p 
+        op[1:] = x[:(len(x) - p)]
 
         return op
 
 
     def dw(y, yhat):
         """
-        this function has not been used in the code yet
-        will be needed when analyze_betas is added
         """
         res = y - yhat
-        lag_res = lagp(res, 1)
+        lag_res = R_MarketMatching.lagp(res, 1)
 
         r = np.corrcoef(res[1:len(res)], lag_res[1:len(lag_res)])
 
@@ -234,7 +233,7 @@ class R_MarketMatching():
         distances_df = distances_df.sort_values('combined_rank', ascending=True)
         distances_df.drop(['dist_rank', 'Skip', 'combined_rank', 'corr_rank'], axis=1, inplace=True)
         distances_df['rank'] = np.arange(distances_df.shape[0])
-        distances_df = distances_df[distances_df['rank'] <= matches]
+        distances_df = distances_df[distances_df['rank'] < matches]
         distances_df.drop(['matches', 'w'], axis=1, inplace=True)
 
         #TODO tidyr::replace_na(list(Correlation_of_logs=0)) line 123
@@ -334,12 +333,9 @@ class R_MarketMatching():
         # get a vector of all markets that matches are wanted for.
         # Check to ensure markets_to_be_matched exists in the data.
 
-        segmentation = False
-
         if markets_to_be_matched is None:
-
             markets_to_be_matched = list(ip_df['id_var'].unique())
-            segmentation = True
+
         else:
             markets_to_be_matched = list(set(markets_to_be_matched))
 
@@ -350,8 +346,8 @@ class R_MarketMatching():
         if not parallel:
             for i in range(len(markets_to_be_matched)):
                 dist_op = R_MarketMatching.calculate_distances(markets_to_be_matched, ip_df, id_variable,
-                                              i, warping_limit, matches, dtw_emphasis
-                                              )
+                                                i, warping_limit, matches, dtw_emphasis
+                                                )
 
                 if i == 0:
                     # initialized all_distances as dataframe instead of list
@@ -379,8 +375,8 @@ class R_MarketMatching():
             shortest_distances_df = all_distances.copy(deep=True)
 
         suggested_split = None
-        #TODO check the next part if segmentation == True - this part has changed in the most recent version
-        if segmentation:
+        #TODO check the next part if suggest_market_splits == True - this part has changed in the most recent version
+        if suggest_market_splits:
 
             sizes = shortest_distances_df.copy()
             sizes['market'] = sizes[id_variable] # check this part
@@ -407,7 +403,7 @@ class R_MarketMatching():
             optimal_list = []
             j = 1
             for i in range(len(sizes_grouped)): #TODO check
-                bin_ = sizes_grouped.at(i, market)
+                bin_ = sizes_grouped.at(i, 'market')
                 tdf = shortest_distances_df.copy()
                 tdf['test_market'] = tdf[id_variable]
                 tdf = tdf[(tdf['test_market'] == bin_ & tdf['BestControl'] == bin_)]
@@ -455,10 +451,12 @@ class R_MarketMatching():
         return output
 
 
+
+
     def inference(matched_markets=None, bsts_modelargs=None, test_market=None, end_post_period=None,
-                alpha=0.05, prior_level_sd=0.01, control_matches=5, analyze_betas=False, nseasons=None,
-                ci_fit_method = 'vi'
-                ):
+                    alpha=0.05, prior_level_sd=0.01, control_matches=5, analyze_betas=False, nseasons=None,
+                    ci_fit_method = 'vi'
+                    ):
 
 
         try:
@@ -484,11 +482,11 @@ class R_MarketMatching():
 
         # copy the distances
         best_matches = matched_markets["best_matches"]
-        mm = best_matches[best_matches['rank'] <= control_matches]
+        mm = best_matches[best_matches['rank'] < control_matches]
 
         data = matched_markets["data"]
 
-        mm['id_var'] = mm.iloc[:,0]
+        mm['id_var'] = mm.iloc[:, 0]
         mm.sort_values(['id_var', 'BestControl'], ascending = [True, True], inplace=True)
 
         # TODO convert to try catch
@@ -502,14 +500,11 @@ class R_MarketMatching():
             end_post_period = filt_df['date_var'].max()
 
         # filter for dates
-        filt_df = mm[mm['id_var'] == test_market] # why is this required?
+        filt_df = mm[mm['id_var'] == test_market]
         matching_start_date = filt_df['matching_start_date'].iloc[0]
         matching_end_date = filt_df['matching_end_date'].iloc[0]
 
         data = data[(data['date_var'] >= matching_start_date) & (data['date_var'] <= end_post_period)]
-
-        ## get the control market name
-        filt_df = mm[mm['id_var'] == test_market]
 
         control_market = list(filt_df['BestControl'])
 
@@ -542,17 +537,31 @@ class R_MarketMatching():
         for i in range(len(control_market)):
             print(f'Control Market {i}: {control_market[i]}')
 
-        #TODO print from Line 617
+        print(f'Market ID: {matched_markets["market_id"]}')
+        print(f'Date Variable: {matched_markets["date_variable"]}')
+        print(f'Matching (pre) Period Start Date: {matching_start_date}')
+        print(f'Matching (pre) Period End Date: {matching_end_date}')
+        print(f'Post Period Start Date: {post_period_start_date}')
+        print(f'Post Period End Date: {post_period_end_date}')
+        print(f'Matching Metric: {matched_markets["matching_metric"]}')
+
+        print('------------- bsts model arguments -------------')
 
         model_parms = bsts_modelargs.keys()
 
         for key, value in bsts_modelargs.items():
             print(f"{key} : {value}")
 
+        print('--------------------------')
+
         if nseasons not in model_parms:
             print('No seasonality component (controlled for by the matched markets) ')
+        
+        print('--------------------------')
 
         print(f'Posterior Intervals Tail Area: {100*(1 - alpha)}')
+
+        print('--------------------------')
 
         pre_period = [matching_start_date, matching_end_date]
         post_period = [post_period_start_date, post_period_end_date]
@@ -565,11 +574,11 @@ class R_MarketMatching():
         if analyze_betas:
             print('analyze betas not implemented yet')
 
-
         #TODO burn <- SuggestBurn(0.1, impact$model$bsts.model)
 
-        #TODO Line 669 from ci.summary
+        #TODO Line 790
         ## create statistics
+        # for now all the relevant stats are being returned under the key: 'summary_data'
 
         results = {}
 
@@ -582,8 +591,41 @@ class R_MarketMatching():
 
         ## compute mape
 
+        # impact$series in R is computed in impact.inferences.post_cum_effects_means in python
+        r_impact_series_op = impact.inferences
+
+        # choosing non-zero values and then doing a diff of the df for now, until there is some clarity
+        # on the comparison of the output of the python package vs R
+        non_zero = r_impact_series_op.loc[(r_impact_series_op['post_cum_effects_means'] > 0) | (r_impact_series_op['post_cum_effects_means'] < 0), :]
+        pre_period = r_impact_series_op[~r_impact_series_op.index.isin(non_zero.index)]
+        pre_period["res"] = pre_period['complete_preds_means'] - pre_period['post_preds_means']
+
+        mape = R_MarketMatching.mape_no_zeros(pre_period['complete_preds_means'], pre_period['post_preds_means'])
+        dw = R_MarketMatching.dw(pre_period['complete_preds_means'], pre_period['post_preds_means'])
+
+        results['pre_period_mape'] = mape
+        results['dw'] = dw
+
         print('------------- Model Stats -------------')
 
-        print('Matching (pre) Period MAPE: ')
+        print('Note: the MAPE and DW values are not accurate due to a difference in the output of')
+        print('the causal impact python and R libraries - this will be fixed in the future')
+
+        print('Matching (pre) Period MAPE: ', mape)
+
+
+        # TODO print Beta coeff: Line 808 -
+
+        print('DW: ', dw)
+
+        ### print results
+
+        print('------------- Effect Analysis -------------')
+        print('Cumulative Absolute Effect: ', impact_summ_data.loc['abs_effect']['cumulative'])
+        print('Cumulative Relative Effect: ', impact_summ_data.loc['rel_effect']['cumulative'])
+
+        # TODO
+        print(f'Probability of a causal impact: TBA')
+
 
         return results
